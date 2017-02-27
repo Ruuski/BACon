@@ -7,9 +7,10 @@ import {
 } from 'react-native'
 import styles from './styles'
 
-// grams of alcohol in a standard drink
+//  of alcohol in a standard drink
 const STD_DRINK_GRMS = 10;
 const KG_TO_GRMS = 1000;
+const MS_TO_HR = 1/3600000;
 
 class Main extends React.Component {
   constructor() {
@@ -18,8 +19,12 @@ class Main extends React.Component {
       Bac: 0,
       drinks: [{
         time: new Date().getTime(),
-        grams: 0
-      }],
+        grams: 10
+      },
+      // {
+      //
+      // }
+    ],
       soberIn: 0,
       drinksHad: 0,
       bodyWeightKg: 60,
@@ -28,32 +33,28 @@ class Main extends React.Component {
   }
 
   componentDidMount () {
-
-
+    this.updateBac()
   }
 
-  bacCalc (initBac, gramsAlc, bodyWeightKg, genderConstant) {
-    bodyWeightGrams = bodyWeightKg * KG_TO_GRMS;
-    return initBac + (gramsAlc / (bodyWeightGrams*genderConstant))*100;
+  updateBac () {
+    bac = 0;
+    for (i=0; i < this.state.drinks.length; i++) {
+      bac = bac + calcBac(this.state.drinks[i].grams, this.state.bodyWeightKg,
+                          this.state.genderConstant, this.state.drinks[i].time);
+    }
+    console.log(bac);
   }
-
 
   addDrink (gramsAlc) {
-    drinksHad = this.state.drinksHad + 1;
-    Bac = this.bacCalc(this.state.Bac, STD_DRINK_GRMS, this.state.bodyWeightKg,
-                  this.state.genderConstant);
-    lastDrinkTime = new Date().getTime();
-    console.log('date:', lastDrinkTime);
-    this.setState({
-      drinksHad,
-      Bac,
-      lastDrinkTime
-
-    });
-    // console.log('BAC:', this.state.Bac, 'Drinks:', this.state.drinksHad);
+    drinks = this.state.drinks.concat({
+      time: new Date().getTime(),
+      grams: gramsAlc
+    })
+    this.setState(
+      {drinks},
+      ()=>this.updateBac()
+    );
   }
-
-
 
   render () {
     return (
@@ -66,12 +67,19 @@ class Main extends React.Component {
             onPress={()=>this.addDrink(STD_DRINK_GRMS)}
             title="+1 Std Drink"
             color="#841584"
-            accessibilityLabel="Learn more about this purple button"
+            accessibilityLabel="+1 Std Drink"
           />
         </View>
       </View>
     )
   }
+}
+
+calcBac = (gramsAlc, bodyWeightKg, genderConstant, timeIngested) => {
+  curDate = new Date().getTime();
+  hrsElapsed = (curDate - timeIngested) * MS_TO_HR;
+  bodyWeightGrams = bodyWeightKg * KG_TO_GRMS;
+  return (gramsAlc / (bodyWeightGrams * genderConstant)) * 100 - (hrsElapsed * 0.015);
 }
 
 export default Main
