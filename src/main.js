@@ -9,9 +9,10 @@ import styles from './styles'
 import dayOfWeekName from './dayOfWeekName'
 import calcBac from './calcBac'
 import msToReadableTime from './msToReadableTime'
+import calcReadableSoberTime from './calcReadableSoberTime'
+import calcSoberIn from './calcSoberIn'
 
 const STD_DRINK_GRMS = 10;  // grams of alcohol in a standard drink
-const HR_TO_MS = 3600000;
 const SEC_TO_HR = 1/3600;
 
 class Main extends React.Component {
@@ -39,7 +40,7 @@ class Main extends React.Component {
     if (bac > 0) {
       bac -= SEC_TO_HR * 0.015;
       displayBac = bac.toFixed(3);  // display bac to 3 decimal places
-      soberInMs = this.calcSoberIn(bac);      // ms from now user will be sober
+      soberInMs = calcSoberIn(bac);      // ms from now user will be sober
       soberIn = msToReadableTime(soberInMs);
       this.setState({
         bac,
@@ -66,10 +67,10 @@ class Main extends React.Component {
     bac = this.state.bac;
     bac += calcBac(STD_DRINK_GRMS, this.state.bodyWeightKg, this.state.genderConstant);
     displayBac = bac.toFixed(3);
-    soberInMs = this.calcSoberIn(bac);      // ms from now user will be sober
+    soberInMs = calcSoberIn(bac);             // ms from add user will be sober
     soberIn = msToReadableTime(soberInMs);
     console.log(soberIn);
-    soberAt = this.calcSoberAt(soberInMs);  // day and time user will be sober
+    soberAt = calcReadableSoberTime(soberInMs); // day and time user will be sober
     lastDrinkTime = new Date().toTimeString().slice(0, 8);
     this.setState({
       bac,
@@ -79,16 +80,6 @@ class Main extends React.Component {
       soberAt,
       lastDrinkTime
     });
-  }
-
-  calcSoberIn (bac) {
-    return (bac/0.015)*HR_TO_MS;
-  }
-
-  calcSoberAt (soberInMs) {
-    soberAtMs = new Date().getTime() + soberInMs;
-    soberTime = new Date(soberAtMs)
-    return dayOfWeekName(soberTime.getDay()) + ' ' + soberTime.toTimeString().slice(0, 8);
   }
 
   render () {
