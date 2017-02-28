@@ -16,44 +16,59 @@ class Main extends React.Component {
   constructor() {
     super();
     this.state = {
-      Bac: 0,
-      drinks: [{
-        time: new Date().getTime(),
-        grams: 10
-      },
-      // {
-      //
-      // }
-    ],
+      bac: 0,
+      drinks: [
+        {
+          time: new Date().getTime() - 3600000*2,
+          grams: STD_DRINK_GRMS,
+          old: true
+
+        }],
       soberIn: 0,
       drinksHad: 0,
-      bodyWeightKg: 60,
+      bodyWeightKg: 76,
       genderConstant: 0.68    // male: 0.68, female: 0.55
     }
   }
 
   componentDidMount () {
-    this.updateBac()
+
   }
 
   updateBac () {
-    bac = 0;
+    bac = this.state.bac;
     for (i=0; i < this.state.drinks.length; i++) {
-      bac = bac + calcBac(this.state.drinks[i].grams, this.state.bodyWeightKg,
-                          this.state.genderConstant, this.state.drinks[i].time);
+      bac += calcBac(this.state.drinks[i].grams, this.state.bodyWeightKg,
+                     this.state.genderConstant, this.state.drinks[i].time);
     }
-    console.log(bac);
+    console.log('bac:', bac);
   }
 
   addDrink (gramsAlc) {
-    drinks = this.state.drinks.concat({
+    // remove drinks giving -ive effect to bac
+    drinks = this.removeNegDrinks(this.state.drinks);
+    // add new drink
+    drinks = drinks.concat({
       time: new Date().getTime(),
       grams: gramsAlc
-    })
+    });
+    console.log(drinks);
     this.setState(
       {drinks},
       ()=>this.updateBac()
     );
+  }
+
+  // returns array of drinks without drinks which are giving negative bac
+  removeNegDrinks (drinks) {
+    //console.log(drinks);
+    for (i=0; i < drinks.length; i++) {
+      if (calcBac(drinks[i].grams, this.state.bodyWeightKg,
+                  this.state.genderConstant, drinks[i].time) <= 0) {
+        drinks.splice(i, 1);
+      }
+    }
+    return drinks;
   }
 
   render () {
