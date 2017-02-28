@@ -55,7 +55,6 @@ class Main extends React.Component {
 
     if (bac >= this.state.limit) {
       atLimitInMs = calcSoberIn(bac, this.state.limit);
-      console.log(atLimitInMs);
       limitIn = msToReadableTime(atLimitInMs);
     } else {
       limitIn = "00:00:00";
@@ -107,10 +106,10 @@ class Main extends React.Component {
     return (
       <View style={styles.container}>
 
-        <Text style={styles.header}>
+        <Text style={styles.title}>
           Your BAC:
         </Text>
-        <Text style={{paddingBottom: 3, fontSize: 25}}>
+        <Text style={{paddingBottom: 10, fontSize: 40}}>
           {this.state.displayBac}
         </Text>
 
@@ -138,7 +137,7 @@ class Main extends React.Component {
         <Text style={styles.subHeader}>
           at
         </Text>
-        <Text style={{paddingBottom: 20, fontSize: 25}}>
+        <Text style={{paddingBottom: 20, fontSize: 20}}>
           {this.state.limitAt}
         </Text>
 

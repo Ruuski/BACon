@@ -4,10 +4,17 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center'
   },
 
+  title: {
+    fontSize: 50,
+    color: 'black',
+    paddingTop: 20
+
+
+  },
   addDrinkBtn: {
     //flex: 1,
     padding: 40
