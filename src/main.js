@@ -8,14 +8,17 @@ import {
 import styles from './styles'
 import dayOfWeekName from './dayOfWeekName'
 import calcBac from './calcBac'
+import msToReadableTime from './msToReadableTime'
 
 const STD_DRINK_GRMS = 10;  // grams of alcohol in a standard drink
 const HR_TO_MS = 3600000;
+const SEC_TO_HR = 1/3600;
 
 class Main extends React.Component {
   constructor() {
     super();
     this.state = {
+      bac: 0,
       displayBac: 0,
       drinks: [],
       soberIn: 0,
@@ -27,35 +30,51 @@ class Main extends React.Component {
   }
 
   componentDidMount () {
-
+    setInterval(()=>{this.updateBac(this.state.drinks)}, 1000);
   }
 
-  calcBac (drinks) {
+  updateBac () {
     //calculate and return bac given from each drink
-    bac = 0;
-    for (i=0; i < drinks.length; i++) {
-      bac += calcBac(drinks[i].grams, this.state.bodyWeightKg,
-                     this.state.genderConstant, drinks[i].time);
+    bac = this.state.bac;
+    if (bac > 0) {
+      bac -= SEC_TO_HR * 0.015;
+      displayBac = bac.toFixed(3);  // display bac to 3 decimal places
+      soberInMs = this.calcSoberIn(bac);      // ms from now user will be sober
+      soberIn = msToReadableTime(soberInMs);
+      this.setState({
+        bac,
+        displayBac,
+        soberIn
+      });
+    } else {
+      bac = 0;
+      displayBac = bac.toFixed(3);
+      this.setState({
+        bac,
+        displayBac
+      });
     }
-    return bac;
+    console.log(soberIn);
   }
 
   addDrink (gramsAlc) {
-    // remove drinks giving -ive effect to bac, return new array
-    drinks = this.removeNegDrinks(this.state.drinks);
     // add new drink
-    drinks = drinks.concat({
+    drinks = this.state.drinks.concat({
       time: new Date().getTime(),
       grams: gramsAlc
     });
-    bac = this.calcBac(drinks);
-    soberIn = this.calcSoberIn(bac);      // ms from now user will be sober
-    soberAt = this.calcSoberAt(soberIn);  // day and time user will be sober
+    bac = this.state.bac;
+    bac += calcBac(STD_DRINK_GRMS, this.state.bodyWeightKg, this.state.genderConstant);
+    displayBac = bac.toFixed(3);
+    soberInMs = this.calcSoberIn(bac);      // ms from now user will be sober
+    soberIn = msToReadableTime(soberInMs);
+    console.log(soberIn);
+    soberAt = this.calcSoberAt(soberInMs);  // day and time user will be sober
     lastDrinkTime = new Date().toTimeString().slice(0, 8);
-    displayBac = bac.toFixed(3);          // display bac to 3 decimal places
     this.setState({
-      drinks,
+      bac,
       displayBac,
+      drinks,
       soberIn,
       soberAt,
       lastDrinkTime
@@ -66,21 +85,10 @@ class Main extends React.Component {
     return (bac/0.015)*HR_TO_MS;
   }
 
-  calcSoberAt (soberIn) {
-    soberAtMs = new Date().getTime() + soberIn;
+  calcSoberAt (soberInMs) {
+    soberAtMs = new Date().getTime() + soberInMs;
     soberTime = new Date(soberAtMs)
     return dayOfWeekName(soberTime.getDay()) + ' ' + soberTime.toTimeString().slice(0, 8);
-  }
-
-  // returns array of drinks without drinks which are giving negative bac
-  removeNegDrinks (drinks) {
-    for (i=0; i < drinks.length; i++) {
-      if (calcBac(drinks[i].grams, this.state.bodyWeightKg,
-                  this.state.genderConstant, drinks[i].time) <= 0) {
-        drinks.splice(i, 1);
-      }
-    }
-    return drinks;
   }
 
   render () {
