@@ -55,7 +55,6 @@ class Main extends React.Component {
         displayBac
       });
     }
-    console.log(soberIn);
   }
 
   addDrink (gramsAlc) {
@@ -86,23 +85,33 @@ class Main extends React.Component {
     return (
       <View style={styles.container}>
         <Text style={styles.header}>
-          Sober:
+          Sober in
+        </Text>
+        <Text style={{paddingBottom: 10, fontSize: 25}}>
+          {this.state.soberIn}
+        </Text>
+
+        <Text style={styles.header}>
+          on
         </Text>
         <Text style={{paddingBottom: 10, fontSize: 25}}>
           {this.state.soberAt}
         </Text>
+
         <Text style={styles.header}>
           BAC:
         </Text>
         <Text style={{paddingBottom: 10, fontSize: 25}}>
           {this.state.displayBac}
         </Text>
+
         <Text style={styles.header}>
           Last drink at:
         </Text>
         <Text style={{fontSize: 25}}>
           {this.state.lastDrinkTime}
         </Text>
+
         <View style={styles.addDrinkBtn}>
           <Button
             onPress={()=>this.addDrink(STD_DRINK_GRMS)}
