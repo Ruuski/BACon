@@ -105,7 +105,6 @@ class Main extends React.Component {
   render () {
     return (
       <View style={styles.container}>
-
         <Text style={styles.title}>
           Your BAC:
         </Text>
@@ -123,7 +122,7 @@ class Main extends React.Component {
         <Text style={styles.subHeader}>
           at
         </Text>
-        <Text style={{paddingBottom: 20, fontSize: 20}}>
+        <Text style={{paddingBottom: 10, fontSize: 20}}>
           {this.state.soberAt}
         </Text>
 

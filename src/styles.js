@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   },
   addDrinkBtn: {
     //flex: 1,
-    padding: 40
+    padding: 20
   },
 
   header: {
