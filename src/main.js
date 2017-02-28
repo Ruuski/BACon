@@ -24,7 +24,7 @@ class Main extends React.Component {
       soberAt: "Now",
       bodyWeightKg: 70,
       genderConstant: 0.68,    // male: 0.68, female: 0.55
-      lastDrinkTime: null
+      lastDrinkTime: "Never"
     }
   }
 
@@ -88,28 +88,28 @@ class Main extends React.Component {
   render () {
     return (
       <View style={styles.container}>
-        <Text>
+        <Text style={styles.header}>
           Sober:
         </Text>
-        <Text style={{paddingBottom: 10}}>
+        <Text style={{paddingBottom: 10, fontSize: 25}}>
           {this.state.soberAt}
         </Text>
-        <Text>
+        <Text style={styles.header}>
           BAC:
         </Text>
-        <Text style={{paddingBottom: 10}}>
+        <Text style={{paddingBottom: 10, fontSize: 25}}>
           {this.state.displayBac}
         </Text>
-        <Text>
+        <Text style={styles.header}>
           Last drink at:
         </Text>
-        <Text style={{paddingBottom: 10}}>
+        <Text style={{fontSize: 25}}>
           {this.state.lastDrinkTime}
         </Text>
         <View style={styles.addDrinkBtn}>
           <Button
             onPress={()=>this.addDrink(STD_DRINK_GRMS)}
-            title="+1 Std Drink"
+            title=" +1 Standard Drink "
             color="#841584"
             accessibilityLabel="+1 Std Drink"
           />

@@ -11,6 +11,11 @@ const styles = StyleSheet.create({
   addDrinkBtn: {
     //flex: 1,
     padding: 40
+  },
+
+  header: {
+    fontSize: 30,
+    color: 'black'
   }
 })
 
