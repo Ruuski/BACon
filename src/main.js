@@ -6,13 +6,11 @@ import {
   Button
 } from 'react-native'
 import styles from './styles'
-
+import dayOfWeekName from './dayOfWeekName'
+import calcBac from './calcBac'
 
 const STD_DRINK_GRMS = 10;  // grams of alcohol in a standard drink
-const KG_TO_GRMS = 1000;
-const MS_TO_HR = 1/3600000;
 const HR_TO_MS = 3600000;
-const SAFETY_CONST = 1.02;  // give buffer of 2% to BAC to account for errors
 
 class Main extends React.Component {
   constructor() {
@@ -116,37 +114,6 @@ class Main extends React.Component {
         </View>
       </View>
     )
-  }
-}
-
-calcBac = (gramsAlc, bodyWeightKg, genderConstant, timeIngested) => {
-  curTime = new Date().getTime();
-  hrsElapsed = (curTime - timeIngested) * MS_TO_HR;
-  bodyWeightGrams = bodyWeightKg * KG_TO_GRMS;
-  return ((gramsAlc / (bodyWeightGrams * genderConstant)) * 100)*SAFETY_CONST - (hrsElapsed * 0.015);
-}
-
-dayOfWeekName = (dayOfWeek) => {
-  if (dayOfWeek === 1) {
-    return 'Monday';
-  }
-  else if (dayOfWeek === 2) {
-    return 'Tuesday';
-  }
-  else if (dayOfWeek === 3) {
-    return 'Wednesday';
-  }
-  else if (dayOfWeek === 4) {
-    return 'Thursday';
-  }
-  else if (dayOfWeek === 5) {
-    return 'Friday';
-  }
-  else if (dayOfWeek === 6) {
-    return 'Saturday';
-  }
-  else if (dayOfWeek === 7) {
-    return 'Sunday';
   }
 }
 
