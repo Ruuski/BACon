@@ -16,7 +16,12 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 30,
     color: 'black'
-  }
+  },
+
+  subHeader: {
+    fontSize: 23,
+    color: 'black'
+  },
 })
 
 export default styles;

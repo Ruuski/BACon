@@ -22,8 +22,11 @@ class Main extends React.Component {
       bac: 0,
       displayBac: 0,
       drinks: [],
-      soberIn: 0,
+      limit: 0.05,
+      soberIn: "00:00:00",
       soberAt: "Now",
+      limitIn: "00:00:00",
+      limitAt: "Below target",
       bodyWeightKg: 70,
       genderConstant: 0.68,    // male: 0.68, female: 0.55
       lastDrinkTime: "Never"
@@ -35,26 +38,37 @@ class Main extends React.Component {
   }
 
   updateBac () {
-    //calculate and return bac given from each drink
     bac = this.state.bac;
+    limit = this.state.limit;
     if (bac > 0) {
       bac -= SEC_TO_HR * 0.015;
       displayBac = bac.toFixed(3);  // display bac to 3 decimal places
-      soberInMs = calcSoberIn(bac);      // ms from now user will be sober
+      soberInMs = calcSoberIn(bac, 0);      // ms from now user will be sober
       soberIn = msToReadableTime(soberInMs);
-      this.setState({
-        bac,
-        displayBac,
-        soberIn
-      });
     } else {
       bac = 0;
       displayBac = bac.toFixed(3);
-      this.setState({
-        bac,
-        displayBac
-      });
+      soberAt = "Now";
+      soberIn = "00:00:00";
+      this.setState({soberAt});
     }
+
+    if (bac >= this.state.limit) {
+      atLimitInMs = calcSoberIn(bac, this.state.limit);
+      console.log(atLimitInMs);
+      limitIn = msToReadableTime(atLimitInMs);
+    } else {
+      limitIn = "00:00:00";
+      limitAt = "Below target";
+      this.setState({limitAt});
+    }
+    this.setState({
+      bac,
+      displayBac,
+      soberIn,
+      limitIn
+    });
+
   }
 
   addDrink (gramsAlc) {
@@ -66,11 +80,19 @@ class Main extends React.Component {
     bac = this.state.bac;
     bac += calcBac(STD_DRINK_GRMS, this.state.bodyWeightKg, this.state.genderConstant);
     displayBac = bac.toFixed(3);
-    soberInMs = calcSoberIn(bac);             // ms from add user will be sober
+    soberInMs = calcSoberIn(bac, 0);             // ms from add user will be sober
     soberIn = msToReadableTime(soberInMs);
-    console.log(soberIn);
     soberAt = calcReadableSoberTime(soberInMs); // day and time user will be sober
+    atLimitInMs = calcSoberIn(bac, this.state.limit);
     lastDrinkTime = new Date().toTimeString().slice(0, 8);
+    if (bac > this.state.limit) {
+      limitIn = msToReadableTime(atLimitInMs);
+      limitAt = calcReadableSoberTime(atLimitInMs);
+      this.setState({
+        limitIn,
+        limitAt
+      })
+    }
     this.setState({
       bac,
       displayBac,
@@ -84,32 +106,40 @@ class Main extends React.Component {
   render () {
     return (
       <View style={styles.container}>
-        <Text style={styles.header}>
-          Sober in
-        </Text>
-        <Text style={{paddingBottom: 10, fontSize: 25}}>
-          {this.state.soberIn}
-        </Text>
 
         <Text style={styles.header}>
-          on
+          Your BAC:
         </Text>
-        <Text style={{paddingBottom: 10, fontSize: 25}}>
-          {this.state.soberAt}
-        </Text>
-
-        <Text style={styles.header}>
-          BAC:
-        </Text>
-        <Text style={{paddingBottom: 10, fontSize: 25}}>
+        <Text style={{paddingBottom: 3, fontSize: 25}}>
           {this.state.displayBac}
         </Text>
 
         <Text style={styles.header}>
-          Last drink at:
+          Sober in
         </Text>
-        <Text style={{fontSize: 25}}>
-          {this.state.lastDrinkTime}
+        <Text style={{paddingBottom: 0, fontSize: 25}}>
+          {this.state.soberIn}
+        </Text>
+
+        <Text style={styles.subHeader}>
+          at
+        </Text>
+        <Text style={{paddingBottom: 20, fontSize: 20}}>
+          {this.state.soberAt}
+        </Text>
+
+        <Text style={styles.header}>
+          Target BAC (0.05) in
+        </Text>
+        <Text style={{paddingBottom: 0, fontSize: 25}}>
+          {this.state.limitIn}
+        </Text>
+
+        <Text style={styles.subHeader}>
+          at
+        </Text>
+        <Text style={{paddingBottom: 20, fontSize: 25}}>
+          {this.state.limitAt}
         </Text>
 
         <View style={styles.addDrinkBtn}>
