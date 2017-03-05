@@ -14,6 +14,7 @@ import calcSoberIn from './calcSoberIn'
 
 const STD_DRINK_GRMS = 10;  // grams of alcohol in a standard drink
 const SEC_TO_HR = 1/3600;
+const HR_TO_MS = 3600000;
 
 class Main extends React.Component {
   constructor() {
@@ -25,16 +26,20 @@ class Main extends React.Component {
       limit: 0.05,
       soberIn: "00:00:00",
       soberAt: "Now",
+      soberAtMs: 0,
       limitIn: "00:00:00",
       limitAt: "Below target",
-      bodyWeightKg: 70,
-      genderConstant: 0.68,    // male: 0.68, female: 0.55
+      profile: {
+        bodyWeightKg: 70,
+        genderConstant: 0.68    // male: 0.68, female: 0.55}
+      },
       lastDrinkTime: "Never"
     }
   }
 
   componentDidMount () {
-    setInterval(()=>{this.updateBac(this.state.drinks)}, 1000);
+    this.setState({soberAtMs: new Date().getTime()});
+    //setInterval(()=>{this.updateBac(this.state.drinks)}, 1000);
   }
 
   updateBac () {
@@ -67,40 +72,72 @@ class Main extends React.Component {
       soberIn,
       limitIn
     });
-
   }
 
-  addDrink (gramsAlc) {
-    // add new drink
-    drinks = this.state.drinks.concat({
-      time: new Date().getTime(),
-      grams: gramsAlc
-    });
-    bac = this.state.bac;
-    bac += calcBac(STD_DRINK_GRMS, this.state.bodyWeightKg, this.state.genderConstant);
-    displayBac = bac.toFixed(3);
-    soberInMs = calcSoberIn(bac, 0);             // ms from add user will be sober
-    soberIn = msToReadableTime(soberInMs);
-    soberAt = calcReadableSoberTime(soberInMs); // day and time user will be sober
-    atLimitInMs = calcSoberIn(bac, this.state.limit);
-    lastDrinkTime = new Date().toTimeString().slice(0, 8);
-    if (bac > this.state.limit) {
-      limitIn = msToReadableTime(atLimitInMs);
-      limitAt = calcReadableSoberTime(atLimitInMs);
-      this.setState({
-        limitIn,
-        limitAt
-      })
+  calcSoberAt(curSoberAtMs, gramsAlc) {
+    extraBac = calcBac(gramsAlc, this.state.profile.bodyWeightKg, this.state.profile.genderConstant);
+    extraTimeMs = calcSoberIn(extraBac, 0);
+    newSoberAtMs = curSoberAtMs + extraTimeMs;
+    return newSoberAtMs;
+  }
+
+  calcBacFromSoberAt(soberAtMs) {
+    curTimeMs = new Date().getTime();
+    soberInMs = soberAtMs - curTimeMs;
+    console.log(soberInMs);
+    bac = (soberInMs/HR_TO_MS)*0.016;
+    return bac;
     }
-    this.setState({
-      bac,
-      displayBac,
-      drinks,
-      soberIn,
-      soberAt,
-      lastDrinkTime
-    });
-  }
+
+    addDrink (gramsAlc) {
+      // add new drink
+      drinks = this.state.drinks.concat({
+        time: new Date().getTime(),
+        grams: gramsAlc
+      });
+
+      soberAtMs = this.calcSoberAt(this.state.soberAtMs, gramsAlc);
+      bac = this.calcBacFromSoberAt(soberAtMs);
+      displayBac = bac.toFixed(3);
+      this.setState({
+        bac,
+        soberAtMs,
+        displayBac
+      });
+
+
+    }
+  // addDrink (gramsAlc) {
+  //   // add new drink
+  //   drinks = this.state.drinks.concat({
+  //     time: new Date().getTime(),
+  //     grams: gramsAlc
+  //   });
+  //   bac = this.state.bac;
+  //   bac += calcBac(STD_DRINK_GRMS, this.state.profile.bodyWeightKg, this.state.profile.genderConstant);
+  //   displayBac = bac.toFixed(3);
+  //   soberInMs = calcSoberIn(bac, 0);             // ms from add user will be sober
+  //   soberIn = msToReadableTime(soberInMs);
+  //   soberAt = calcReadableSoberTime(soberInMs); // day and time user will be sober
+  //   atLimitInMs = calcSoberIn(bac, this.state.limit);
+  //   lastDrinkTime = new Date().toTimeString().slice(0, 8);
+  //   if (bac > this.state.limit) {
+  //     limitIn = msToReadableTime(atLimitInMs);
+  //     limitAt = calcReadableSoberTime(atLimitInMs);
+  //     this.setState({
+  //       limitIn,
+  //       limitAt
+  //     })
+  //   }
+  //   this.setState({
+  //     bac,
+  //     displayBac,
+  //     drinks,
+  //     soberIn,
+  //     soberAt,
+  //     lastDrinkTime
+  //   });
+  // }
 
   render () {
     return (
