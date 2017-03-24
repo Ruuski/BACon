@@ -25,10 +25,10 @@ class Main extends React.Component {
       drinks: [],
       limit: 0.05,
       soberIn: "00:00:00",
-      soberAt: "Now",
+      soberAt: "You're sober",
       soberAtMs: 0,
       limitIn: "00:00:00",
-      limitAt: "Below limit",
+      limitAt: "You're below the limit",
       limitAtMs: 0,
       bodyWeightKg: 70,
       genderConstant: 0.68,   // male: 0.68, female: 0.55}
@@ -42,79 +42,92 @@ class Main extends React.Component {
   }
 
   updateTimers() {
-    if (this.state.soberAt != "Now") {
-      let curTimeMs = new Date().getTime();
+    var curTimeMs = new Date().getTime();
+    // update sober in if has alc
+    if (this.state.soberAtMs > curTimeMs) {
       let soberInMs = this.state.soberAtMs - curTimeMs;
-      let soberIn = msToReadableTime(soberInMs);
-      this.setState({soberIn});
+      var soberIn = msToReadableTime(soberInMs);
+      var soberAt = this.state.soberAt;
+    } else {
+      var soberAt = "You're sober";
+      var soberIn = "00:00:00";
     }
+
+    // update limit in
+    if (this.state.limitAtMs > curTimeMs) {
+      let limitInMs = this.state.limitAtMs - curTimeMs;
+      var limitIn = msToReadableTime(limitInMs);
+      var limitAt = this.state.limitAt;
+    } else {
+      var limitAt = "You're below the limit";
+      var limitIn = "00:00:00";
+    }
+    this.setState({
+      soberIn,
+      soberAt,
+      limitIn,
+      limitAt
+    });
   }
 
   updateState() {
-    if (this.state.soberAtMs > new Date().getTime()) {
-      bac = this.calcBacFromSoberAt(this.state.soberAtMs);
-      let displayBac = bac.toFixed(3);
-      let soberAt = calcReadableTime(this.state.soberAtMs);
-      this.setState({
-        bac,
-        displayBac,
-        soberAt
-      }, ()=> {this.updateTimers()});
-
-      // Update Target BAC if necissary
-      if (bac - this.state.limit > 0) {
-
-
+    var curTimeMs = new Date().getTime();
+    if (this.state.soberAtMs > curTimeMs) {
+      var bac = this.bacFromSoberAt(this.state.soberAtMs);
+      var displayBac = bac.toFixed(3);
+      var soberAt = calcReadableTime(this.state.soberAtMs);
+      } else {
+        var soberAt = "Now";
+        var bac = 0;
+        var displayBac = 0;
       }
 
-
-
+    // update limit state if above limit
+    if (this.state.limitAtMs > curTimeMs) {
+      var limitAt = calcReadableTime(this.state.limitAtMs);
     } else {
-      this.setState({soberAt: "Now"});
+      var limitAt = "You're below the limit";
     }
+    this.setState({
+      bac,
+      displayBac,
+      soberAt,
+      limitAt
+    }, ()=> {this.updateTimers()});
   }
 
-
-  calcTimeTillBacAfterMoreAlc(gramsAlc, Bac, initialTimeMs) {
-    let extraBac = calcBac(gramsAlc, this.state.bodyWeightKg, this.state.genderConstant);
-    let extraTimeMs = calcTimeTillBacInMs(extraBac, Bac);
-    //console.log(msToReadableTime(extraTimeMs));
-    let newTimeAtMs = initialTimeMs + extraTimeMs;
-    return newTimeAtMs;
-  }
-
-  calcBacFromSoberAt(soberAtMs) {
+  bacFromSoberAt(soberAtMs) {
     let curTimeMs = new Date().getTime();
     let soberInMs = soberAtMs - curTimeMs;
     let bac = (soberInMs/HR_TO_MS)*0.016;
     return bac;
   }
 
-    addDrink (gramsAlc) {
-      // add new drink to drinks history
-      let drinks = this.state.drinks.concat({
-        time: new Date().getTime(),
-        grams: gramsAlc
-      });
-      this.updateSoberAtMsAndState(gramsAlc);
-      // update soberAtMs and limitAtMs to appropriate value, depending on if user currently
-      // is sober or now
-      //console.log(this.state.soberAtMs, this.state.limitAtMs);
+  addDrink (gramsAlc) {
+    // add new drink to drinks history
+    let drinks = this.state.drinks.concat({
+      time: new Date().getTime(),
+      grams: gramsAlc
+    });
 
+    // update everything...
+    if (this.state.soberAtMs < new Date().getTime()) {
+      curSoberAtMs = new Date().getTime();
+    } else {
+      curSoberAtMs = this.state.soberAtMs;
     }
+    let soberAtMs = this.timeTillBacAfterMoreAlc(gramsAlc, 0, curSoberAtMs);
+    let limitAtMs = this.timeTillBacAfterMoreAlc(gramsAlc, this.state.limit, curSoberAtMs);
+    this.setState({soberAtMs, limitAtMs}, ()=> {this.updateState()});
+  }
 
-    updateSoberAtMsAndState(gramsAlc) {
-      if (this.state.soberAtMs < new Date().getTime()) {
-        curSoberAtMs = new Date().getTime();
-      } else {
-        curSoberAtMs = this.state.soberAtMs;
-      }
-
-      //console.log(msToReadableTime(curLimitAtMs), msToReadableTime(curSoberAtMs));
-      let soberAtMs = this.calcTimeTillBacAfterMoreAlc(gramsAlc, 0, curSoberAtMs);
-      // set times limit and sober will be reached. can now calc everything else.
-      this.setState({soberAtMs}, ()=> {this.updateState()});
-    }
+  timeTillBacAfterMoreAlc(gramsAlc, Bac, initialTimeMs) {
+      let extraBac = calcBac(gramsAlc, this.state.bodyWeightKg, this.state.genderConstant);
+      let extraTimeMs = calcTimeTillBacInMs(extraBac, Bac);
+      //console.log(msToReadableTime(extraTimeMs));
+      let newTimeAtMs = initialTimeMs + extraTimeMs;
+      return newTimeAtMs;
+  }
 
   render () {
     return (
@@ -160,7 +173,7 @@ class Main extends React.Component {
             title=" +1 Standard Drink "
             color="#841584"
             accessibilityLabel="+1 Std Drink"
-          />
+            />
         </View>
       </View>
     )
