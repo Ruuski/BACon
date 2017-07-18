@@ -2,23 +2,27 @@ import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 
 import SettingsScreenStyles from './styles/SettingsScreenStyles';
+// const { bodyWeightKg, genderConstant, updateProfile } = this.props;
 
 class SettingsScreen extends React.Component {
   render() {
-    // const { bodyWeightKg, genderConstant, updateProfile } = this.props;
     return (
 
       <View style={SettingsScreenStyles.container}>
-        <View style={SettingsScreenStyles.chooseSex}>
-          <Text>
-            Select your biological sex
+        <View style={SettingsScreenStyles.header}>
+          <Text style={SettingsScreenStyles.title}>
+            Welcome to BACon
+          </Text>
+          <Text style={SettingsScreenStyles.subtitle}>
+            Blood Alcohol Content: On Demand
           </Text>
         </View>
-        <View style={SettingsScreenStyles.chooseBodyWeight}>
-          <Text>
-            Enter your current body weight in kilograms
-          </Text>
-        </View>
+        <Text style={SettingsScreenStyles.chooseSex}>
+          Select your biological sex
+        </Text>
+        <Text style={SettingsScreenStyles.chooseBodyWeight}>
+          Enter your body weight in kilograms
+        </Text>
       </View>
     )
   }
