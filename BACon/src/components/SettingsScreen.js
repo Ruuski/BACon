@@ -14,7 +14,7 @@ class SettingsScreen extends React.Component {
       <View style={SettingsScreenStyles.container}>
         <View style={SettingsScreenStyles.header}>
           <Text style={SettingsScreenStyles.title}>
-            BACon Setup
+            BACon
           </Text>
         </View>
         <View style={SettingsScreenStyles.chooseSex}>
