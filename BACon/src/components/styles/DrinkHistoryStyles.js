@@ -4,6 +4,10 @@ const DrinkHistoryStyles = StyleSheet.create({
   container: {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
+  },
+  title: {
+    fontSize: 30,
+    fontFamily: 'Roboto'
   }
 })
 

@@ -10,6 +10,9 @@ class DrinkHistory extends React.Component {
     const { drinks } = this.props;
     return (
       <View style={DrinkHistoryStyles.container}>
+        <Text style={DrinkHistoryStyles.title}>
+          Drink history
+        </Text>
         <ScrollView>
           {
             drinks.map(drink =>

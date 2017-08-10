@@ -4,10 +4,11 @@ const ConfigBarStyles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     flexDirection: 'column',
+    alignItems: 'center',
   },
   settingsText: {
     textAlign: 'center',
-    fontSize: 20
+    fontSize: 18,
   }
 })
 

@@ -31,11 +31,11 @@ const BacScreenStyles = StyleSheet.create({
   },
   drinkHistory: {
     padding: 20,
-    borderWidth: 1
+    // borderWidth: 1
   },
   configBar: {
     // flex: 10,
-    height: 40,
+    padding: 5,
     backgroundColor: 'grey',
     // borderWidth: 1
   }
