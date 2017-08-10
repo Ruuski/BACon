@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 const TargetInfoStyles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: 20,
+    paddingBottom: 40,
     justifyContent: 'flex-start',
     alignItems: 'center'
   },

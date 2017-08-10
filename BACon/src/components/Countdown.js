@@ -15,6 +15,9 @@ class Countdown extends React.Component {
         <Text style={CountdownStyles.counter}>
           {time}
         </Text>
+        <Text style={CountdownStyles.key}>
+          (hh:mm:ss)
+        </Text>
       </View>
     )
   }

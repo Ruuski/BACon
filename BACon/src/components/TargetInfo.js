@@ -11,7 +11,7 @@ class TargetInfo extends React.Component {
     return (
       <View style={TargetInfoStyles.container}>
         <Text style={TargetInfoStyles.header}>
-          Limit in
+          Time until below limit
         </Text>
         <Countdown time={limitIn}/>
         <Text style={TargetInfoStyles.subHeader}>

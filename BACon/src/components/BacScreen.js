@@ -214,7 +214,6 @@ class BacScreen extends React.Component {
             <BacDisplay displayBac={limit} title={"Your Limit"} />
           </View>
           <View style={BacScreenStyles.displayInfo}>
-            <SoberInfo soberAt={soberAt} soberIn={soberIn} />
             <TargetInfo limitAt={limitAt} limitIn={limitIn} />
           </View>
           <View style={BacScreenStyles.addDrinkButton}>

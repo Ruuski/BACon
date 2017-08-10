@@ -7,6 +7,9 @@ const CountdownStyles = StyleSheet.create({
   },
   counter: {
     fontSize: 26,
+  },
+  key: {
+    fontSize: 12
   }
 })
 
