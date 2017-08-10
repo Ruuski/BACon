@@ -18,25 +18,20 @@ const SettingsScreenStyles = StyleSheet.create({
     color: 'black',
     textAlign: 'center',
   },
-  subtitle: {
-    fontSize: 20,
-    textAlign: 'center',
-    fontStyle: 'italic'
-  },
   chooseSex: {
     flex: 0.25,
   },
   chooseSexText: {
-    fontSize: 20,
+    fontSize: 16,
   },
   chooseBodyWeight: {
     flex: 0.25,
   },
   chooseBodyWeightText: {
-    fontSize: 20,
+    fontSize: 16,
   },
   chooseBodyWeightInput: {
-    fontSize: 20,
+    fontSize: 16,
     textAlign: 'center',
     width: 75,
   },
@@ -44,10 +39,10 @@ const SettingsScreenStyles = StyleSheet.create({
     flex: 0.25,
   },
   chooseLimitText: {
-    fontSize: 20,
+    fontSize: 16,
   },
   chooseLimitInput: {
-    fontSize: 20,
+    fontSize: 16,
     textAlign: 'center',
     width: 75,
   },

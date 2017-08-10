@@ -75,9 +75,9 @@ class SettingsScreen extends React.Component {
             onPress={()=>{updateProfile(parseFloat(selectedWeight), selectedGender, parseFloat(selectedLimit))}}
             title="Update Settings"
             color="#841584"
-            accessibilityLabel="Learn more about this purple button" />
+            accessibilityLabel="Update Settings" />
           <Text style={SettingsScreenStyles.updateButtonText}>
-            Updating your settings will reset your session
+            Updating settings will reset your session
           </Text>
         </View>
 
