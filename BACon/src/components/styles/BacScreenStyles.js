@@ -11,23 +11,23 @@ const BacScreenStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    borderWidth: 1,
+    // borderWidth: 1,
   },
   displayInfo: {
     justifyContent: 'center',
     flexDirection: 'row',
-    borderWidth: 1
+    // borderWidth: 1
   },
   slider: {
     padding: 15,
-    borderWidth: 1
+    // borderWidth: 1
   },
   addDrinkButton: {
-    borderWidth: 1
+    // borderWidth: 1
   },
   stdDrinkSlider: {
     padding: 15,
-    borderWidth: 1
+    // borderWidth: 1
   },
   drinkHistory: {
     padding: 20,
@@ -35,9 +35,9 @@ const BacScreenStyles = StyleSheet.create({
   },
   configBar: {
     // flex: 10,
-    marginTop: 40,
+    height: 40,
     backgroundColor: 'grey',
-    borderWidth: 1
+    // borderWidth: 1
   }
 })
 
