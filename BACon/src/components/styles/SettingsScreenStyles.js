@@ -33,8 +33,13 @@ const SettingsScreenStyles = StyleSheet.create({
   },
   chooseBodyWeight: {
     flex: 0.25,
+  },
+  chooseBodyWeightText: {
     fontSize: 20,
-    textAlign: 'center'
+  },
+  chooseBodyWeightInput: {
+    textAlign: 'center',
+    width: 100,
   }
 })
 

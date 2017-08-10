@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Picker } from 'react-native';
+import { Text, View, Picker, TextInput } from 'react-native';
 
 import SettingsScreenStyles from './styles/SettingsScreenStyles';
 // const { bodyWeightKg, genderConstant, updateProfile } = this.props;
@@ -25,9 +25,15 @@ class SettingsScreen extends React.Component {
           <Picker.Item label="Female" value="f" />
           </Picker>
         </View>
-        <Text style={SettingsScreenStyles.chooseBodyWeight}>
-          Enter your body weight in kilograms
-        </Text>
+        <View style={SettingsScreenStyles.chooseBodyWeight}>
+          <Text style={SettingsScreenStyles.chooseBodyWeightText}>
+            Enter your body weight in kilograms
+          </Text>
+          <TextInput
+          style={SettingsScreenStyles.chooseBodyWeightInput}
+          keyboardType = 'numeric'
+          />
+        </View>
       </View>
     )
   }
