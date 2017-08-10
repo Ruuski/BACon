@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
 // import style
 import BacScreenStyles from './styles/BacScreenStyles';
 // import helpers
@@ -50,7 +50,7 @@ class BacScreen extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'Overview',
+    title: 'Your BAC Overview',
   };
 
   componentDidMount() {
@@ -177,6 +177,7 @@ class BacScreen extends React.Component {
   }
 
   render () {
+    const { navigate } = this.props.navigation;
     const {
       displayBac,
       soberAt,
@@ -214,9 +215,9 @@ class BacScreen extends React.Component {
             <DrinkHistory drinks={drinks}/>
           </View>
         </ScrollView>
-        <View style={BacScreenStyles.configBar}>
+        <TouchableOpacity style={BacScreenStyles.configBar} onPress={() => navigate('SettingsScreen')}>
           <ConfigBar />
-        </View>
+        </TouchableOpacity>
       </View>
     )
   }

@@ -5,7 +5,7 @@ const ConfigBarStyles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
   },
-  settingsButton: {
+  settingsText: {
     textAlign: 'center',
     fontSize: 20
   }

@@ -5,6 +5,9 @@ import SettingsScreenStyles from './styles/SettingsScreenStyles';
 // const { bodyWeightKg, genderConstant, updateProfile } = this.props;
 
 class SettingsScreen extends React.Component {
+  static navigationOptions = {
+    title: 'Settings',
+  };
   render() {
     return (
 

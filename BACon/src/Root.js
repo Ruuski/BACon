@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
 
 import BacScreen from './components/BacScreen';
-
-// import SetupScreen from './SetupScreen';
+import SettingsScreen from './components/SettingsScreen';
 
 const App = StackNavigator({
   BacScreen: { screen: BacScreen },
+  SettingsScreen: { screen: SettingsScreen },
 });
 
 

@@ -11,7 +11,7 @@ class ConfigBar extends React.Component {
     const { soberIn, soberAt } = this.props;
     return (
       <View style={ConfigBarStyles.container}>
-        <Text style={ConfigBarStyles.settingsButton}>
+        <Text style={ConfigBarStyles.settingsText}>
           Settings
         </Text>
       </View>
