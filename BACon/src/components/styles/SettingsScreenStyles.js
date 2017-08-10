@@ -25,8 +25,6 @@ const SettingsScreenStyles = StyleSheet.create({
   },
   chooseSex: {
     flex: 0.25,
-    fontSize: 20,
-    textAlign: 'center'
   },
   chooseSexText: {
     fontSize: 20,
@@ -38,8 +36,24 @@ const SettingsScreenStyles = StyleSheet.create({
     fontSize: 20,
   },
   chooseBodyWeightInput: {
+    fontSize: 20,
     textAlign: 'center',
-    width: 100,
+    width: 75,
+  },
+  chooseLimit: {
+    flex: 0.25,
+  },
+  chooseLimitText: {
+    fontSize: 20,
+  },
+  chooseLimitInput: {
+    fontSize: 20,
+    textAlign: 'center',
+    width: 75,
+  },
+  updateButtonText: {
+    marginTop: 10,
+    textAlign: 'center'
   }
 })
 

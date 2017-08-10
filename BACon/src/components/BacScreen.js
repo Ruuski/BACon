@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, TouchableOpacity } from 'react-native';
+import { View, ScrollView, TouchableOpacity, ToastAndroid } from 'react-native';
 // import style
 import BacScreenStyles from './styles/BacScreenStyles';
 // import helpers
@@ -47,10 +47,11 @@ class BacScreen extends React.Component {
     }
     this.addDrink = this.addDrink.bind(this);
     this.updateSliderValue = this.updateSliderValue.bind(this);
+    this.updateProfile = this.updateProfile.bind(this);
   }
 
   static navigationOptions = {
-    title: 'Your BAC Overview',
+    title: 'BAC Overview',
   };
 
   componentDidMount() {
@@ -101,14 +102,14 @@ class BacScreen extends React.Component {
     const curTimeMs = new Date().getTime();
 
     // update stats unless no alcohol in system
-    if (soberAtMs > curTimeMs) {
+    if (soberAtMs >= curTimeMs) {
       const bac = bacFromSoberAt(soberAtMs);
       const displayBac = bac.toFixed(3);
       const soberAt = formatAMPM(new Date(soberAtMs));
       this.setState({ bac, displayBac, soberAt });
     } else {
       const bac = 0;
-      const displayBac = 0;
+      const displayBac = "0.00";
       const soberAt = "Now";
       this.setState({ bac, displayBac, soberAt });
     }
@@ -172,12 +173,25 @@ class BacScreen extends React.Component {
     }
   }
 
-  updateProfile(bodyWeightKg, genderConstant) {
-    this.setState({bodyWeightKg, genderConstant})
+  updateProfile(bodyWeightKg, genderConstant, limit) {
+    this.setState({
+      bodyWeightKg,
+      genderConstant,
+      limit,
+      drinks: [],
+      soberAtMs: 0,
+      limitAtMs: 0
+    }, ()=> {
+      this.updateStats();
+      this.updateSliderValue(this.state.sliderValue);
+    }
+  );
+    ToastAndroid.show('Settings updated and session reset', ToastAndroid.SHORT);
   }
 
   render () {
     const { navigate } = this.props.navigation;
+    const updateProfile = this.updateProfile;
     const {
       displayBac,
       soberAt,
@@ -188,7 +202,9 @@ class BacScreen extends React.Component {
       drinks,
       sliderValue,
       projectedBac,
-      sliderMessage
+      sliderMessage,
+      genderConstant,
+      bodyWeightKg
     } = this.state;
     return (
       <View style={BacScreenStyles.container}>
@@ -215,7 +231,7 @@ class BacScreen extends React.Component {
             <DrinkHistory drinks={drinks}/>
           </View>
         </ScrollView>
-        <TouchableOpacity style={BacScreenStyles.configBar} onPress={() => navigate('SettingsScreen')}>
+        <TouchableOpacity style={BacScreenStyles.configBar} onPress={() => navigate('SettingsScreen', {updateProfile, genderConstant, bodyWeightKg, limit})}>
           <ConfigBar />
         </TouchableOpacity>
       </View>
