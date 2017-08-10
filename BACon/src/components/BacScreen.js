@@ -49,6 +49,10 @@ class BacScreen extends React.Component {
     this.updateSliderValue = this.updateSliderValue.bind(this);
   }
 
+  static navigationOptions = {
+    title: 'Overview',
+  };
+
   componentDidMount() {
     this.timerInterval = setInterval(()=>{this.updateTimers()}, 1000);
     this.stateInterval = setInterval(()=>{this.updateStats()}, 100000);
