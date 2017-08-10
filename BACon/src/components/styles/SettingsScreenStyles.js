@@ -28,6 +28,9 @@ const SettingsScreenStyles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center'
   },
+  chooseSexText: {
+    fontSize: 20,
+  },
   chooseBodyWeight: {
     flex: 0.25,
     fontSize: 20,

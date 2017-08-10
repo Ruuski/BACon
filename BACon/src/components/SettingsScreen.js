@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Picker } from 'react-native';
 
 import SettingsScreenStyles from './styles/SettingsScreenStyles';
 // const { bodyWeightKg, genderConstant, updateProfile } = this.props;
@@ -11,15 +11,20 @@ class SettingsScreen extends React.Component {
       <View style={SettingsScreenStyles.container}>
         <View style={SettingsScreenStyles.header}>
           <Text style={SettingsScreenStyles.title}>
-            Welcome to BACon
-          </Text>
-          <Text style={SettingsScreenStyles.subtitle}>
-            Blood Alcohol Content: On Demand
+            BACon Setup
           </Text>
         </View>
-        <Text style={SettingsScreenStyles.chooseSex}>
-          Select your biological sex
-        </Text>
+        <View style={SettingsScreenStyles.chooseSex}>
+          <Text style={SettingsScreenStyles.chooseSexText}>
+            Select your biological sex
+          </Text>
+          <Picker
+          style={SettingsScreenStyles.chooseSexPicker}
+          selectedValue={"m"}>
+          <Picker.Item label="Male" value="m" />
+          <Picker.Item label="Female" value="f" />
+          </Picker>
+        </View>
         <Text style={SettingsScreenStyles.chooseBodyWeight}>
           Enter your body weight in kilograms
         </Text>
